@@ -1,0 +1,39 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: democommerce
+  labels:
+    app: democommerce
+spec:
+  selector:
+    app: democommerce
+  ports:
+  - protocol: "TCP"
+    port: 8080
+    targetPort: 8080
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: democommerce
+spec:
+  selector:
+    matchLabels:
+      app: democommerce
+  template:
+    metadata:
+      labels:
+        app: democommerce
+    spec:
+      containers:
+      - name: democommerce
+        image: canernvektora/democommerce
+        env:
+          - name: USERNAME
+            value: dbuser
+          - name: PASSWORD
+            value: password
+          - name: MY_SQL
+            value: jdbc:mysql://mysqldb:3306
+        ports:
+        - containerPort: 8080
